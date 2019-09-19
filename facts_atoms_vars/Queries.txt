@@ -1,0 +1,27 @@
+1.Is Bob a parent of Pat?
+parent(bob,pat).
+
+2.Is Liz a parent of Pat?
+parent(liz,pat).
+
+3.Is tom a parent of Ben?
+parent(tom,ben).
+
+4. Who is Liz's parent?
+parent(X,liz).
+
+5. Who are Bob's children?
+parent(bob,X).
+
+6. Find X and Y such that X is a parent of Y
+parent(X,Y).
+
+7. Who is a grandparent of Jim?
+parent( Y, jim), parent( X, Y).
+parent( X, Y),parent( Y, jim).
+
+8. Who are Tom's grandchildren?
+parent( tomn X), parent( X, Y).
+
+9. Do Ann and Pat have a common parent?
+parent( X, ann), parent( X, pat).
