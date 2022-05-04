@@ -64,3 +64,4 @@ urllib3==1.26.9
 Werkzeug==2.1.1
 wrapt==1.14.0
 zipp==3.8.0
+dash-bootstrap-components==1.0.3

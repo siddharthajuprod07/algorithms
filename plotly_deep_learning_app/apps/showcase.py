@@ -12,15 +12,17 @@ from tensorflow.keras.applications.resnet50 import decode_predictions,preprocess
 from tensorflow.keras import utils
 import numpy as np
 from dash import dash_table
+from apps import navigation
 
 IMAGE_DATASET_HOME = os.path.join(os.path.dirname(__file__),'..','datasets','images')
 imagefiles_list = [f for f in os.listdir(IMAGE_DATASET_HOME) if os.path.isfile(os.path.join(IMAGE_DATASET_HOME,f))]
 
 model_showcase_layout = html.Div(children=[
-    html.H1(children="This is model showcase page"),
-    dcc.Link('Home',href="/"),
+    navigation.navbar,
+    # html.H1(children="This is model showcase page"),
+    # dcc.Link('Home',href="/"),
     html.Br(),
-    html.H2(children="1. Classify image using resnet50"),
+    html.H3(children="1. Classify image using resnet50"),
     html.Div([
         "Select an Image:",
         dcc.Dropdown(id="image-dropdown",
@@ -45,7 +47,7 @@ def update_output(image_name):
         predicted_dict = {}
         for di in decode_img_prediction[0]:
             predicted_dict[di[1]] = di[2]
-        return html.Div([html.H5(image_name),
+        return html.Div([#html.H5(image_name),
         html.Hr(),
         html.Img(src=img),
         html.Div([dash_table.DataTable([predicted_dict])])
