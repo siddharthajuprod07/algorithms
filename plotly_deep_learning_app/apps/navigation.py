@@ -32,7 +32,7 @@ navbar = dbc.Navbar(
                 [
                     dbc.Row([
                         dbc.Col([
-                            html.Img(src=app.get_asset_url('logo2.png'), height="30px"),
+                            html.Img(src=app.get_asset_url('logo2.png'), height="40px"),
                             dbc.NavbarBrand("Plotly Deep Learning App", className="ms-2")
                         ],
                         width={"size":"auto"})
