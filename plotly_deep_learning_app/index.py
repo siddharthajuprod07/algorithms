@@ -6,7 +6,7 @@ from dash import dcc
 from dash.dependencies import Input, Output
 
 from app import app
-from apps import home, showcase
+from apps import home, showcase, fundamentals
 
 url_content_layout = html.Div(children=[
     dcc.Location(id="url",refresh=False),
@@ -26,6 +26,8 @@ app.validation_layout = html.Div([
 def update_output_div(pathname):
     if pathname == "/showcase":
         return  showcase.model_showcase_layout
+    elif pathname == "/fundamentals":
+        return fundamentals.page_layout
     else:
         return home.home_layout
 
