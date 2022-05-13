@@ -44,7 +44,15 @@ navbar = dbc.Navbar(
                         dbc.Col([
                             dbc.Nav([
                                 dbc.NavItem(dbc.NavLink("Home", href="/")),
-                                dbc.NavItem(dbc.NavLink("Fundamentals", href="/fundamentals")),
+                                #dbc.NavItem(dbc.NavLink("Fundamentals", href="/fundamentals")),
+                                dbc.NavItem(dbc.DropdownMenu(
+                                        children=[
+                                            dbc.DropdownMenuItem("How neural network learns", href="/hownnlearns")
+                                        ],
+                                        nav=True,
+                                        in_navbar=True,
+                                        label="Fundamentals",
+                                )),
                                 dbc.NavItem(dbc.NavLink("Model Showcase", href="/showcase")),
                                 dbc.NavItem(dbc.DropdownMenu(
                                         children=[

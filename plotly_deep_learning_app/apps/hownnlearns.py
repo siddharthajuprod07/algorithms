@@ -4,8 +4,12 @@ from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
 from apps import navigation
+import tensorflow as tf
+from tensorflow.keras.datasets import mnist
 
 
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+print(len(y_train))
 
 page_layout = html.Div([
     navigation.navbar,
