@@ -4,15 +4,29 @@ from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
 from apps import navigation
-import tensorflow as tf
-from tensorflow.keras.datasets import mnist
+import dash_bootstrap_components as dbc
 
 
-(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-print(len(y_train))
+breadcrumb=dbc.Container(
+    dbc.Row(
+        dbc.Col(
+            dbc.Breadcrumb(
+                items=[
+                    {"label": "Home", "href": "/", "external_link": False},
+                    {
+                        "label": "Fundamentals"
+                    },
+                    {"label": "How Neural network Learns", "active": True},
+                ],
+            )
+        )
+    ),
+    fluid=True
+)
 
 page_layout = html.Div([
     navigation.navbar,
-    html.H3(children="This is deep learning fundamentals page"),
+    breadcrumb,
+    html.H3(children="This is how neural network learns page"),
     ]
 )
