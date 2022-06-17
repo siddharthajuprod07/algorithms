@@ -18,7 +18,8 @@ app.layout = url_content_layout
 app.validation_layout = html.Div([
     url_content_layout,
     home.home_layout,
-    showcase.model_showcase_layout
+    showcase.model_showcase_layout,
+    hownnlearns.dl_content
 ])
 
 
