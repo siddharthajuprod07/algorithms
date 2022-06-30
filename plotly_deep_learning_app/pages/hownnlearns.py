@@ -5,8 +5,10 @@ from dash import dcc
 from dash.dependencies import Input, Output
 from apps import navigation
 import dash_bootstrap_components as dbc
-from app import app
+#from app import app
+import dash
 
+dash.register_page(__name__,path='/hownnlearns')
 
 breadcrumb=dbc.Container(
     dbc.Row(
@@ -81,7 +83,7 @@ dl_content = dbc.Container([
 ],
 fluid=True)
 
-page_layout = html.Div([
+layout = html.Div([
     navigation.navbar,
     breadcrumb,
     initial_paragraph_content,
@@ -90,7 +92,7 @@ page_layout = html.Div([
 )
 
 
-@app.callback(
+@dash.callback(
     [Output("visualize_mnist_dataset_div","children"),
     Output("training_mnist_div","children"),
     Output("testing_mnist_div","children")],
