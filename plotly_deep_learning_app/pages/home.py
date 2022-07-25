@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 from apps import navigation
 import dash
 
-dash.register_page(__name__,path='/')
+dash.register_page(__name__,path='/',title="Plotly deep learning app",description="Deep learning simplified",image='logo2.png')
 
 layout = html.Div(children=[
     navigation.navbar,

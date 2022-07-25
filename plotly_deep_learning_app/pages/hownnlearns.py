@@ -8,7 +8,7 @@ import dash_bootstrap_components as dbc
 #from app import app
 import dash
 
-dash.register_page(__name__,path='/hownnlearns')
+dash.register_page(__name__,path='/hownnlearns',title="How neural network learns",description="How neural network learns",image='logo2.png')
 
 breadcrumb=dbc.Container(
     dbc.Row(

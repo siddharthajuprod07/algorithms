@@ -15,7 +15,7 @@ from dash import dash_table
 from apps import navigation
 import dash
 
-dash.register_page(__name__,path='/showcase')
+dash.register_page(__name__,path='/showcase',title="Deep learning models")
 
 IMAGE_DATASET_HOME = os.path.join(os.path.dirname(__file__),'..','datasets','images')
 imagefiles_list = [f for f in os.listdir(IMAGE_DATASET_HOME) if os.path.isfile(os.path.join(IMAGE_DATASET_HOME,f))]
