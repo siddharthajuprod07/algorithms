@@ -54,11 +54,11 @@ navbar = dbc.Navbar(
                                         in_navbar=True,
                                         label="Fundamentals",
                                 )),
-                                dbc.NavItem(dbc.NavLink("Model Showcase", href="/showcase")),
+                                dbc.NavItem(dbc.NavLink("Model Showcase", href="/showcase/models")),
                                 dbc.NavItem(dbc.DropdownMenu(
                                         children=[
                                             dbc.DropdownMenuItem("More pages", header=True),
-                                            dbc.DropdownMenuItem("Model Showcase", href="/showcase")
+                                            dbc.DropdownMenuItem("Model Showcase", href="/showcase/models")
                                         ],
                                         nav=True,
                                         in_navbar=True,

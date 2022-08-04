@@ -4,7 +4,7 @@ from dash import html
 
 
 
-app = dash.Dash(__name__,use_pages=True,external_stylesheets=[dbc.themes.UNITED, dbc.icons.BOOTSTRAP])
+app = dash.Dash(__name__,use_pages=True,external_stylesheets=[dbc.themes.UNITED, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True)
 server = app.server
 
 app.layout = html.Div(children=[
