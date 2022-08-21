@@ -7,6 +7,9 @@ from apps import navigation
 import dash_bootstrap_components as dbc
 #from app import app
 import dash
+import tensorflow as tf
+import numpy as np
+import plotly.express as px
 
 dash.register_page(__name__,path='/hownnlearns',title="How neural network learns",description="How neural network learns",image='logo2.png')
 
@@ -102,8 +105,41 @@ def update_accordion_items(accordion_item):
     visualize_mnist = ""
     training_mnist =""
     testing_mnist = ""
+    (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
     if accordion_item == "visualize_mnist_dataset":
-        visualize_mnist = "This is the content for MNIST viz"
+        #visualize_mnist = "This is the content for MNIST viz"
+        train_image_labels, train_image_counts = np.unique(y_train, return_counts=True)
+        test_image_labels, test_image_counts = np.unique(y_test, return_counts=True)
+        training_fig = px.pie(names=train_image_labels,values=train_image_counts,hole=0.3)
+        testing_fig = px.pie(names=test_image_labels,values=test_image_counts,hole=0.3)
+        card_content_training = [
+            dbc.CardHeader("Training dataset distribution"),
+            dbc.CardBody(
+                [
+                    dcc.Graph(figure=training_fig)
+                ]
+            ),
+        ]
+        card_content_testing = [
+            dbc.CardHeader("Testing dataset distribution"),
+            dbc.CardBody(
+                [
+                    dcc.Graph(figure=testing_fig)
+                ]
+            ),
+        ]
+        visualize_mnist = dbc.Container([
+            dbc.Row([
+                dbc.Col([
+                    dbc.Card(card_content_training,color="primnary",outline=True)
+                ],
+                width={"size":"6"}),
+                dbc.Col([
+                    dbc.Card(card_content_testing,color="primnary",outline=True)
+                ],
+                width={"size":"6"}),
+            ])
+        ])
     if accordion_item == "training_mnist":
         training_mnist = "This is the content for Model training"
     if accordion_item == "testing_mnist":
