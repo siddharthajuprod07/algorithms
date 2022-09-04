@@ -111,7 +111,9 @@ def update_accordion_items(accordion_item):
         train_image_labels, train_image_counts = np.unique(y_train, return_counts=True)
         test_image_labels, test_image_counts = np.unique(y_test, return_counts=True)
         training_fig = px.pie(names=train_image_labels,values=train_image_counts,hole=0.3)
+        training_fig.update_layout(annotations=[dict(text=str(len(y_train)),x=0.5, y=0.5,font_size = 20, showarrow=False)])
         testing_fig = px.pie(names=test_image_labels,values=test_image_counts,hole=0.3)
+        testing_fig.update_layout(annotations=[dict(text=str(len(y_test)),x=0.5, y=0.5,font_size = 20, showarrow=False)])
         card_content_training = [
             dbc.CardHeader("Training dataset distribution"),
             dbc.CardBody(
