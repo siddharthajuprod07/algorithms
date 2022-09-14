@@ -10,6 +10,8 @@ import dash
 import tensorflow as tf
 import numpy as np
 import plotly.express as px
+import json
+import random
 
 dash.register_page(__name__,path='/hownnlearns',title="How neural network learns",description="How neural network learns",image='logo2.png')
 
@@ -118,7 +120,7 @@ def update_accordion_items(accordion_item):
             dbc.CardHeader("Training dataset distribution"),
             dbc.CardBody(
                 [
-                    dcc.Graph(figure=training_fig)
+                    dcc.Graph(figure=training_fig, id="training_fig")
                 ]
             ),
         ]
@@ -126,20 +128,38 @@ def update_accordion_items(accordion_item):
             dbc.CardHeader("Testing dataset distribution"),
             dbc.CardBody(
                 [
-                    dcc.Graph(figure=testing_fig)
+                    dcc.Graph(figure=testing_fig, id="testing_fig")
+                ]
+            ),
+        ]
+        card_label_img_display = [
+            dbc.CardHeader("Click on the donut chart to display image (choosen randomly)"),
+            dbc.CardBody(
+                [
+                    html.Div(id="clicked_label_img_div")
                 ]
             ),
         ]
         visualize_mnist = dbc.Container([
             dbc.Row([
                 dbc.Col([
-                    dbc.Card(card_content_training,color="primnary",outline=True)
+                    dbc.Card(card_content_training,color="primary",outline=True)
                 ],
                 width={"size":"6"}),
                 dbc.Col([
-                    dbc.Card(card_content_testing,color="primnary",outline=True)
+                    dbc.Card(card_content_testing,color="primary",outline=True)
                 ],
                 width={"size":"6"}),
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    html.Br()
+                ])
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Card(card_label_img_display,color="primary",outline=True)
+                ])
             ])
         ])
     if accordion_item == "training_mnist":
@@ -147,3 +167,20 @@ def update_accordion_items(accordion_item):
     if accordion_item == "testing_mnist":
         testing_mnist = "This is the content for Model testing"
     return visualize_mnist,training_mnist,testing_mnist
+
+
+
+@dash.callback(
+    [Output("clicked_label_img_div","children")],
+    [Input("training_fig","clickData")],
+    prevent_initial_call=True
+)
+def render_label_img(drilldown_data):
+    clicked_label = drilldown_data["points"][0]["label"]
+    (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data() # Will fix it later
+    possible_indices = np.where(y_train == int(clicked_label))
+    choosen_index = random.choice(possible_indices[0])
+    print(possible_indices)
+    print(choosen_index)
+    fig = px.imshow(x_train[choosen_index])
+    return [dcc.Graph(figure=fig)]
