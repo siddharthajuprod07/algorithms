@@ -1,7 +1,7 @@
 #import dash_html_components as html
 from dash import html
 #import dash_core_components as dcc
-from dash import dcc
+from dash import dcc, ctx
 from dash.dependencies import Input, Output
 from apps import navigation
 import dash_bootstrap_components as dbc
@@ -132,14 +132,14 @@ def update_accordion_items(accordion_item):
                 ]
             ),
         ]
-        card_label_img_display = [
-            dbc.CardHeader("Click on the donut chart to display image (choosen randomly)"),
-            dbc.CardBody(
-                [
-                    html.Div(id="clicked_label_img_div")
-                ]
-            ),
-        ]
+        # card_label_img_display = [
+        #     dbc.CardHeader("Click on the donut chart to display image (choosen randomly)"),
+        #     dbc.CardBody(
+        #         [
+        #             html.Div(id="clicked_label_img_div")
+        #         ]
+        #     ),
+        # ]
         visualize_mnist = dbc.Container([
             dbc.Row([
                 dbc.Col([
@@ -158,7 +158,8 @@ def update_accordion_items(accordion_item):
             ]),
             dbc.Row([
                 dbc.Col([
-                    dbc.Card(card_label_img_display,color="primary",outline=True)
+                    html.Div(id="clicked_label_img_div")
+                    #dbc.Card(card_label_img_display,color="primary",outline=True)
                 ])
             ])
         ])
@@ -172,15 +173,34 @@ def update_accordion_items(accordion_item):
 
 @dash.callback(
     [Output("clicked_label_img_div","children")],
-    [Input("training_fig","clickData")],
+    [Input("training_fig","clickData"),
+    Input("testing_fig","clickData")],
     prevent_initial_call=True
 )
-def render_label_img(drilldown_data):
-    clicked_label = drilldown_data["points"][0]["label"]
+def render_label_img(drilldown_data_training,drilldown_data_testing):
+    callback_source= ctx.triggered_id
+    source_dataset= ""
+    print(callback_source)
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data() # Will fix it later
-    possible_indices = np.where(y_train == int(clicked_label))
-    choosen_index = random.choice(possible_indices[0])
-    print(possible_indices)
-    print(choosen_index)
-    fig = px.imshow(x_train[choosen_index])
-    return [dcc.Graph(figure=fig)]
+    if callback_source == "training_fig":
+        source_dataset = "Training"
+        clicked_label = drilldown_data_training["points"][0]["label"]
+        possible_indices = np.where(y_train == int(clicked_label))
+        choosen_index = random.choice(possible_indices[0])
+        fig = px.imshow(x_train[choosen_index])
+    if callback_source == "testing_fig":
+        source_dataset = "Testing"
+        clicked_label = drilldown_data_testing["points"][0]["label"]
+        possible_indices = np.where(y_test == int(clicked_label))
+        choosen_index = random.choice(possible_indices[0])
+        fig = px.imshow(x_test[choosen_index])
+
+    card_label_img_display = [
+        dbc.CardHeader("Source Dataset : {}, clicked Image : {}, chosen index : {}".format(source_dataset,clicked_label,choosen_index)),
+        dbc.CardBody(
+            [
+                dcc.Graph(figure=fig)
+            ]
+        ),
+    ]
+    return [dbc.Card(card_label_img_display,color="primary",outline=True)]
