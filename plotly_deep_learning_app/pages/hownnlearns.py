@@ -186,13 +186,13 @@ def render_label_img(drilldown_data_training,drilldown_data_testing):
         source_dataset = "Training"
         clicked_label = drilldown_data_training["points"][0]["label"]
         possible_indices = np.where(y_train == int(clicked_label))
-        choosen_index = random.choice(possible_indices[0])
+        choosen_index = np.random.choice(possible_indices[0])
         fig = px.imshow(x_train[choosen_index])
     if callback_source == "testing_fig":
         source_dataset = "Testing"
         clicked_label = drilldown_data_testing["points"][0]["label"]
         possible_indices = np.where(y_test == int(clicked_label))
-        choosen_index = random.choice(possible_indices[0])
+        choosen_index = np.random.choice(possible_indices[0])
         fig = px.imshow(x_test[choosen_index])
 
     card_label_img_display = [
