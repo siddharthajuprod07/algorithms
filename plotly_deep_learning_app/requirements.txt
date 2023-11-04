@@ -5,3 +5,4 @@ dash-table
 tensorflow
 dash-bootstrap-components
 pandas
+pillow
