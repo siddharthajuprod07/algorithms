@@ -12,6 +12,7 @@ import numpy as np
 import plotly.express as px
 import json
 import random
+import dash_mantine_components as dmc
 
 dash.register_page(__name__,path='/hownnlearns',title="How neural network learns",description="How neural network learns",image='logo2.png')
 
@@ -79,6 +80,7 @@ dl_content = dbc.Container([
                             ),
                         ],
                         flush=True,
+                        start_collapsed= True,
                         id="dl_accordion"
                     ),
                 )
@@ -96,7 +98,7 @@ layout = html.Div([
     ]
 )
 
-
+## Callback to update accordion panel items content
 @dash.callback(
     [Output("visualize_mnist_dataset_div","children"),
     Output("training_mnist_div","children"),
@@ -164,13 +166,27 @@ def update_accordion_items(accordion_item):
             ])
         ])
     if accordion_item == "training_mnist":
-        training_mnist = "This is the content for Model training"
+        training_mnist = html.Div(children=[
+            dbc.Container(children=[
+                dbc.Row(children=[
+                    dmc.ChipGroup(
+                        [dmc.Chip(x, value=x) for x in ["Single Neuron", "Neural Network"]],
+                        value="Single Neuron",
+                        id="training_chip_group"
+                    )
+                ]),
+                dbc.Row(children=[
+                    html.Div(id="training_chips_content")
+                ])
+            ],fluid=True)
+            
+        ])
     if accordion_item == "testing_mnist":
         testing_mnist = "This is the content for Model testing"
     return visualize_mnist,training_mnist,testing_mnist
 
 
-
+## callback for drilldown
 @dash.callback(
     [Output("clicked_label_img_div","children")],
     [Input("training_fig","clickData"),
@@ -204,3 +220,66 @@ def render_label_img(drilldown_data_training,drilldown_data_testing):
         ),
     ]
     return [dbc.Card(card_label_img_display,color="primary",outline=True)]
+
+
+## callback for drilldown
+@dash.callback(
+    Output("training_chips_content","children"),
+    Input("training_chip_group","value"),
+)
+def render_chipgroup_item_content(selected_chip):
+    training_chips_div_content = []
+    if selected_chip == "Single Neuron":
+        training_chips_div_content = html.Div(children=[
+            dbc.Container(children=[
+                dbc.Row(children=[
+                    dbc.Col(children=[
+                        dmc.Stack(
+                            [
+                                html.Div(children=[
+                                    dbc.Label("Choose activation"),
+                                    dbc.RadioItems(
+                                        options=[
+                                            {"label": "Perceptron", "value": "step"},
+                                            {"label": "Sigmoid function", "value": "sigmoid"},
+                                            {"label": "RELU function", "value": "relu"},
+                                            {"label": "tanh function", "value": "tanh"},
+                                        ],
+                                        value="step",
+                                        id="activation-radioitems-input",
+                                    ),
+                                ]),
+                                dbc.InputGroup(
+                                    [dbc.InputGroupText("X1"), dbc.Input(placeholder="",id="x1",value=0),
+                                     dbc.InputGroupText("W1"), dbc.Input(placeholder="",id="w1",value=0)],
+                                    className="mb-3",
+                                ),
+                                dbc.InputGroup(
+                                    [dbc.InputGroupText("X2"), dbc.Input(placeholder="",id="x2",value=0),
+                                     dbc.InputGroupText("W2"), dbc.Input(placeholder="",id="w2",value=0)],
+                                    className="mb-3",
+                                ),
+                                dbc.InputGroup(
+                                    [dbc.InputGroupText("X3"), dbc.Input(placeholder="",id="x3",value=0),
+                                     dbc.InputGroupText("W3"), dbc.Input(placeholder="",id="w3",value=0)],
+                                    className="mb-3",
+                                ),
+                                dbc.InputGroup(
+                                    [dbc.InputGroupText("b"), dbc.Input(placeholder="",id="b",value=0)],
+                                    className="mb-3",
+                                ),
+                                dbc.Button("Run", color="success", className="me-1"),
+                                
+                            ],
+                            align="left",
+                            spacing="sm",
+                        )
+                    ],width=2),
+                    dbc.Col(children=[],width=4),
+                    dbc.Col(children=[],width=6),
+                ],justify="center",align="center")
+            ],fluid=True)
+        ],style={"margin":"20px"})
+    elif selected_chip == "Neural Network":
+        training_chips_div_content = []
+    return training_chips_div_content

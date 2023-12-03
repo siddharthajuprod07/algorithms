@@ -7,3 +7,4 @@ dash-bootstrap-components
 pandas
 pillow
 dash-uploader
+dash_mantine_components
