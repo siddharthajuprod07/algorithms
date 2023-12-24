@@ -2,7 +2,7 @@
 from dash import html
 #import dash_core_components as dcc
 from dash import dcc, ctx
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from apps import navigation
 import dash_bootstrap_components as dbc
 #from app import app
@@ -268,14 +268,17 @@ def render_chipgroup_item_content(selected_chip):
                                     [dbc.InputGroupText("b"), dbc.Input(placeholder="",id="b",value=0)],
                                     className="mb-3",
                                 ),
-                                dbc.Button("Run", color="success", className="me-1"),
+                                dbc.Button("Run", color="success", className="me-1",id="run_btn"),
                                 
                             ],
                             align="left",
                             spacing="sm",
                         )
                     ],width=2),
-                    dbc.Col(children=[],width=4),
+                    dbc.Col(children=[
+                        html.Div(id="activation_function_equation_div",children=[]),
+                        html.Div(id="activation_function_graph_div",children=[])
+                    ],width=4),
                     dbc.Col(children=[],width=6),
                 ],justify="center",align="center")
             ],fluid=True)
@@ -283,3 +286,53 @@ def render_chipgroup_item_content(selected_chip):
     elif selected_chip == "Neural Network":
         training_chips_div_content = []
     return training_chips_div_content
+
+
+## Callback for the run button
+@dash.callback(
+    Output("activation_function_equation_div","children"),
+    Input("run_btn","n_clicks"),
+    State("activation-radioitems-input","value"),
+    prevent_initial_call=True
+)
+def handle_run_btn(n,activation_func):
+    activation_func_equation_div_content = []
+    if n:
+        if activation_func == "step":
+            activation_func_equation_div_content = html.Div(children=[
+                dcc.Markdown(''' 
+                        $$
+                             H(x) = \\begin{cases}1&(x\\geqq 0)\\\\0&(x\\lt 0)\\end{cases}
+                        $$
+                
+                    ''',mathjax=True)
+            ])
+        elif activation_func == "sigmoid":
+            activation_func_equation_div_content = html.Div(children=[
+                dcc.Markdown(''' 
+                        $$
+                             f(x) = \\frac{1}{1+e^{-x}}
+                        $$
+                
+                    ''',mathjax=True)
+            ])
+        elif activation_func == "relu":
+            activation_func_equation_div_content = activation_func_equation_div_content = html.Div(children=[
+                dcc.Markdown(''' 
+                        $$
+                             f(x) = \\max(0,x)
+                        $$
+                
+                    ''',mathjax=True)
+            ])
+        elif activation_func == "tanh":
+            activation_func_equation_div_content = activation_func_equation_div_content = activation_func_equation_div_content = html.Div(children=[
+                dcc.Markdown(''' 
+                        $$
+                             tanh(x) = \\frac{sinh(x)}{cosh(x)} = \\frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}
+                        $$
+                
+                    ''',mathjax=True)
+            ])
+        return activation_func_equation_div_content
+
